@@ -30,7 +30,6 @@ const Input: React.FC<InputProps> = ({
         });
     };
     useEffect(() => {
-        console.log('ffffff=', defaultVal);
         setInputVal(defaultVal);
     }, []);
     return (

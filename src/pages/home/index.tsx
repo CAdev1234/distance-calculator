@@ -2,17 +2,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import './home.scss';
 import {Dropdown, Input, Button} from '@components/ui/common';
 import {City_Data, Storage_Key} from '@data/constant';
-import {CityType} from '@dtypes/type';
+import {CityType, FormDataType} from '@dtypes/type';
 import {useNavigate} from 'react-router-dom';
 import storage, {StorageType} from '@utils/storage';
 
-interface FormDataType {
-    origin_city: Array<CityType>;
-    intermediate_cities: Array<CityType>;
-    destination_city: Array<CityType>;
-    date_trip: string;
-    num_passenger: number;
-}
 interface FormDataUpdateType {
     name: string;
     value: string | number | Array<CityType>;
@@ -47,7 +40,6 @@ const PageHome = () => {
         setFormData({...formData, [item.name]: item.value});
     };
     const submit = () => {
-        console.log('formData=', formData);
         storage.rcSetItem(StorageType.local, Storage_Key.city_data, formData);
         navigate('/final');
     };

@@ -1,7 +1,7 @@
 // import {FormattedIcon} from '@components/icons';
 import {CityType} from '@dtypes/type';
 import React, {useEffect, useRef, useState} from 'react';
-import {Button} from '@components/ui/common';
+import {Button, Loading} from '@components/ui/common';
 import ClickOutside from '../clickOutside/clickOutside';
 import './dropdown.scss';
 
@@ -29,9 +29,32 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>();
     const dropdownInputRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
     const [active, setActive] = useState(false);
     const [tags, setTags] = useState([]);
+    const [options, setOptions] = useState([]);
     const [dropdownListTop, setDropdownListTop] = useState(30);
+    const search = (kw: string) => {
+        setIsLoading(true);
+        if (kw === '') {
+            setOptions(items);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 3000);
+        } else {
+            const optionsClone: Array<CityType> = JSON.parse(
+                JSON.stringify(items),
+            );
+            const filted = optionsClone.filter((item) => {
+                if (String(item[0]).toLowerCase().includes(kw.toLowerCase()))
+                    return item;
+            });
+            setOptions(filted);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
+        }
+    };
     const addTags = (item: CityType) => {
         let newTags = JSON.parse(JSON.stringify(tags));
         if (mulitiple) {
@@ -61,7 +84,6 @@ const Dropdown: React.FC<DropdownProps> = ({
             value: tagClone,
         });
     };
-
     useEffect(() => {
         if (active) {
             const height = (dropdownInputRef.current as HTMLElement)
@@ -71,6 +93,10 @@ const Dropdown: React.FC<DropdownProps> = ({
     }, [tags]);
     useEffect(() => {
         setTags(defaultVal);
+        setOptions(items);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 3000);
     }, []);
 
     return (
@@ -109,26 +135,33 @@ const Dropdown: React.FC<DropdownProps> = ({
                                 </span>
                             );
                         })}
-                        <input type="text" ref={inputRef} />
-                        {/* <FormattedIcon
-                            name={`${active ? 'TriangleUp' : 'TriangleDown'}`}
-                        /> */}
+                        <input
+                            type="text"
+                            ref={inputRef}
+                            onChange={(evt) => {
+                                search(evt.target.value);
+                            }}
+                        />
                     </div>
                     <div
                         className={`dropdown-list ${active ? '' : 'invisible'}`}
                         style={{top: dropdownListTop + 'px'}}>
-                        {items.map((item, idx1) => {
-                            return (
-                                <button
-                                    key={idx1}
-                                    id={`${name}_${item[0]}`}
-                                    onClick={() => {
-                                        addTags(item);
-                                    }}>
-                                    {item[0]}
-                                </button>
-                            );
-                        })}
+                        {isLoading ? (
+                            <Loading ratio={0.5} />
+                        ) : (
+                            options.map((option, idx1) => {
+                                return (
+                                    <button
+                                        key={idx1}
+                                        id={`${name}_${option[0]}`}
+                                        onClick={() => {
+                                            addTags(option);
+                                        }}>
+                                        {option[0]}
+                                    </button>
+                                );
+                            })
+                        )}
                     </div>
                 </div>
             </ClickOutside>

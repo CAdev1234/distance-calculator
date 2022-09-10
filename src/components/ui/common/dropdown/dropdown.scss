@@ -41,9 +41,9 @@
     .dropdown-list {
         position: absolute;
         z-index: 10;
-        // top: 2.5em;
         left: 0;
         width: 100%;
+        min-height: 100px;
         display: flex;
         flex-direction: column;
         background-color: $color_white;

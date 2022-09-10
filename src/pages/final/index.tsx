@@ -1,19 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import './final.scss';
-import {Dropdown, Input} from '@components/ui/common';
+import {Dropdown, Input, Loading} from '@components/ui/common';
 import {City_Data, Storage_Key} from '@data/constant';
-import {CityType} from '@dtypes/type';
+import {CityType, FormDataType} from '@dtypes/type';
 import {calDisWithHaversine} from '@utils/common';
-import Loading from '@components/ui/common/loading';
 import storage, {StorageType} from '@utils/storage';
-
-interface FormDataType {
-    origin_city: Array<CityType>;
-    intermediate_cities: Array<CityType>;
-    destination_city: Array<CityType>;
-    date_trip: string;
-    num_passenger: number;
-}
 
 const calcDistance = (from: CityType, via: Array<CityType>, to: CityType) => {
     let distance = 0;
@@ -42,9 +33,22 @@ const calcDistance = (from: CityType, via: Array<CityType>, to: CityType) => {
     );
     return Math.floor(distance * 1000) / 1000;
 };
+const valid = (data: FormDataType) => {
+    const name = 'Dijon';
+    let isValid = true;
+    if (data.origin_city[0].includes(name)) isValid = false;
+    data.intermediate_cities.map((item) => {
+        if (item.includes(name)) isValid = false;
+    });
+    if (data.destination_city[0].includes(name)) {
+        isValid = false;
+    }
+    return isValid;
+};
 
 const PageFinal = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
     const [distance, setDistance] = useState(0);
     const cityData: FormDataType = storage.rcGetItem(
         StorageType.local,
@@ -57,15 +61,21 @@ const PageFinal = () => {
                 cityData.intermediate_cities,
                 cityData.destination_city[0],
             );
+            const isValid = valid(cityData);
+            setIsError(!isValid);
             setDistance(dis);
             setIsLoading(false);
-        }, 1000);
+        }, 3000);
     }, []);
     return (
         <>
             {isLoading && <Loading />}
             <div className="final-page">
-                <h1>Distance: {distance}km</h1>
+                {isError ? (
+                    <h1 className="error">Error: Invalid Data</h1>
+                ) : (
+                    <h1 className="success">Distance: {distance}km</h1>
+                )}
                 <div className="form-item">
                     <label>City of origin:</label>
                     <Dropdown

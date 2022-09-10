@@ -1,9 +1,12 @@
 import React from 'react';
 import './loading.css';
-const Loading = () => {
+interface LoadingProps {
+    ratio?: number;
+}
+const Loading: React.FC<LoadingProps> = ({ratio = 1}) => {
     return (
         <div className="loading">
-            <div className="lds-spinner">
+            <div className="lds-spinner" style={{transform: `scale(${ratio})`}}>
                 <div></div>
                 <div></div>
                 <div></div>
