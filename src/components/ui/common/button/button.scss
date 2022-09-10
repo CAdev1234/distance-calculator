@@ -1,0 +1,30 @@
+@import "@assets/style/variable.scss";
+button.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.7em;
+    cursor: pointer;
+}
+
+button.btn:disabled {
+    cursor: not-allowed;
+}
+
+button.btn.icon-btn {
+    background: transparent;
+    border: none;
+    svg {
+        color: white;
+    }
+}
+
+button.btn.txt-btn {
+    padding: 0.7em 1.5em;
+    border: 1px $color_gray solid;
+    background-color: $color_white;
+    &:enabled:hover {
+        color: $font_hover_color;
+        border-color: $font_hover_color;
+    }
+}

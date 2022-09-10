@@ -1,0 +1,18 @@
+@import "@assets/style/variable.scss";
+input.input {
+    outline: none;
+    width: 100%;
+    background-color: $color_white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border: none;
+    min-height: 2em;
+    padding: 0 0.2em;
+    &::placeholder {
+        color: $font_color;
+        opacity: 0.7;
+    }
+}
+
+input.input.disabled {
+    pointer-events: none;
+}
