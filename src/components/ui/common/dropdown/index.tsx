@@ -62,10 +62,19 @@ const Dropdown: React.FC<DropdownProps> = ({
         } else {
             newTags = [item];
         }
-        const btn: HTMLButtonElement = document.getElementById(
-            `${name}_${item[0]}`,
-        ) as HTMLButtonElement;
-        btn.disabled = true;
+
+        items.forEach((item) => {
+            const btn: HTMLButtonElement = document.getElementById(
+                `${name}_${item[0]}`,
+            ) as HTMLButtonElement;
+            btn.disabled = false;
+        });
+        newTags.forEach((item) => {
+            const btn: HTMLButtonElement = document.getElementById(
+                `${name}_${item[0]}`,
+            ) as HTMLButtonElement;
+            btn.disabled = true;
+        });
         setTags([...newTags]);
         onUpdated({
             name: name,

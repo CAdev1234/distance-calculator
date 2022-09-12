@@ -41,7 +41,7 @@ const PageHome = () => {
     };
     const submit = () => {
         storage.rcSetItem(StorageType.local, Storage_Key.city_data, formData);
-        navigate('/final');
+        navigate(`/final`);
     };
     useEffect(() => {
         const isValid = isValidFormData();

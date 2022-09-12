@@ -9,15 +9,9 @@ const App: React.FC = () => (
         <Header />
         <Layout1>
             <Routes>
-                <Route path="/distance-calculator/" element={<PageHome />} />
-                <Route
-                    path="/distance-calculator/final"
-                    element={<PageFinal />}
-                />
-                <Route
-                    path="*"
-                    element={<Navigate to="/distance-calculator/" replace />}
-                />
+                <Route path="/" element={<PageHome />} />
+                <Route path="/final" element={<PageFinal />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </Layout1>
     </>
